@@ -62,7 +62,7 @@ public class World {
 		int y = (int)(Math.random()*(rabbitSpace.getSizeY()));
 		if(checkIfRabbitOn(x, y) == false){
 			rabbitSpace.putObjectAt(x, y, rabbit);
-			rabbit.setPosition(x, y);			//to fix add setPosition to rabbit class 
+			rabbit.setPosition(x, y);	
 			addedRabbit = true;
 		}
 		return addedRabbit;
