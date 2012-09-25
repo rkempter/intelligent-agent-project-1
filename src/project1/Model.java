@@ -14,6 +14,7 @@ public class Model extends SimModelImpl{
 	private int numRabbits = NUMRABBITS;
 	private int worldXSize = WORLDXSIZE;
 	private int worldYSize = WORLDYSIZE;
+	
 
 	public String getName(){
 		return "Rabbits Simulation";
