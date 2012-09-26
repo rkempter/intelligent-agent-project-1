@@ -20,6 +20,7 @@ public class World {
 		}
 		rabbitSpace = new Object2DGrid(xSize, ySize);
 	}
+	
 	public void growGrass(int grassGrowthRate){
 		//randomly grows grass in the grid (loops grassGrowthRate times)
 		for(int i = 0; i < grassGrowthRate; i++){
@@ -30,7 +31,8 @@ public class World {
 			grassSpace.putObjectAt(x,y,new Integer(grassEnergy));
 		}
 	}
-	public int checkGrassAT(int x, int y){
+	
+	public int eatGrassAt(int x, int y){
 		//check if at x,y there is grass. returns the energy of grass and delete the grass (eats the grass),
 		//returns 0 otherwise
 		int i;
