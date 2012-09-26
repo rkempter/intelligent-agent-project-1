@@ -31,5 +31,11 @@ public class Rabbit {
 	public void moveRabbit() {
 		
 	}
+	
+	public void step() {
+		
+	}
+	
+	
 
 }

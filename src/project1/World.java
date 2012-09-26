@@ -59,7 +59,7 @@ public class World {
 	public boolean addRabbit(Rabbit rabbit){
 		//add rabbit to the cell if the cell is free (to be used when a rabbit moves or for a new rabbit)
 		boolean addedRabbit = false;
-
+		
 		int x = (int)(Math.random()*(rabbitSpace.getSizeX()));
 		int y = (int)(Math.random()*(rabbitSpace.getSizeY()));
 		if(checkIfRabbitOn(x, y) == false){
@@ -70,5 +70,7 @@ public class World {
 		return addedRabbit;
 	}
 
-
+	public Object2DGrid getCurrentGrassSpace() {
+	    return grassSpace;
+	}
 }
