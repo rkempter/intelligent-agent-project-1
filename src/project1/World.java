@@ -46,17 +46,18 @@ public class World {
 		return i;
 	}
 
-	public boolean checkIfRabbitOn(int x, int y){
+	public boolean checkIfRabbitOn(int x, int y) {
 		//check if there is a rabbit at cell x ,y. return True if occupied, false otherwise
 		boolean retVal = false;
-		if(rabbitSpace.getObjectAt(x, y)!=null) retVal = true;
+		if(rabbitSpace.getObjectAt(x, y) != null) retVal = true;
 		return retVal;
 	}
-	public void removeRabbitAt(int x, int y){
+	public void removeRabbitAt(int x, int y) {
 		//remove rabbit from cell (to be used when a rabbits move or if it dies)
 		rabbitSpace.putObjectAt(x, y, null);
 	}
-	public boolean addRabbit(Rabbit rabbit){
+	
+	public boolean placeRabbit(Rabbit rabbit){
 		//add rabbit to the cell if the cell is free (to be used when a rabbit moves or for a new rabbit)
 		boolean addedRabbit = false;
 		
@@ -64,7 +65,7 @@ public class World {
 		int y = (int)(Math.random()*(rabbitSpace.getSizeY()));
 		if(checkIfRabbitOn(x, y) == false){
 			rabbitSpace.putObjectAt(x, y, rabbit);
-			rabbit.setPosition(x, y);	
+			rabbit.setPosXY(x, y);
 			addedRabbit = true;
 		}
 		return addedRabbit;

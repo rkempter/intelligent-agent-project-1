@@ -1,5 +1,8 @@
 package project1;
 
+import java.awt.Color;
+import java.util.ArrayList;
+
 import uchicago.src.sim.engine.Schedule;
 import uchicago.src.sim.engine.SimInit;
 import uchicago.src.sim.engine.SimModelImpl;
@@ -12,6 +15,7 @@ public class Model extends SimModelImpl{
 	
 	private World worldSpace;
 	private DisplaySurface displaySurf;
+	private ArrayList rabbitList;
 	
 	
 	// Default Values
@@ -19,7 +23,7 @@ public class Model extends SimModelImpl{
 	private static final int WORLDXSIZE = 20;
 	private static final int WORLDYSIZE = 20;
 	private static final int REPRODUCTIONCOST = 5;
-	private static final int INITIALGRASS;
+	private static final int INITIALGRASS = 5;
 	
 	private int numRabbits = NUMRABBITS;
 	private int worldXSize = WORLDXSIZE;
@@ -34,6 +38,7 @@ public class Model extends SimModelImpl{
 	public void setup(){
 		System.out.println("Setup of System");
 		worldSpace = null;
+		rabbitList = new ArrayList();
 
 	    if (displaySurf != null){
 	      displaySurf.dispose();
@@ -49,13 +54,21 @@ public class Model extends SimModelImpl{
 		buildModel();
 	    buildSchedule();
 	    buildDisplay();
+	    
+	    displaySurf.display();
 	}
 
 	public void buildModel(){
+		System.out.println("Running BuildModel");
+	    worldSpace = new World(worldXSize, worldYSize);
+	    
+	    for(int i = 0; i < numRabbits; i++) {
+	    	addNewRabbit();
+	    }
 	}
 
 	public void buildSchedule(){
-	
+		System.out.println("Running BuildSchedule");
 	}
 
 	public void buildDisplay(){
@@ -79,6 +92,7 @@ public class Model extends SimModelImpl{
 	}
 
 	public String[] getInitParam(){
+		System.out.println("Init parameters");
 	    String[] initParams = { "NumRabbits", "WorldXSize", "WorldYSize", "ReproductionCost" };
 	    return initParams;
 	}
@@ -113,6 +127,12 @@ public class Model extends SimModelImpl{
 	
 	public void setReproductionCost(int rc) {
 		reproductionCost = rc;
+	}
+	
+	public void addNewRabbit() {
+		Rabbit r = new Rabbit();
+		rabbitList.add(r);
+		worldSpace.placeRabbit(r);
 	}
 
 	public static void main(String[] args) {

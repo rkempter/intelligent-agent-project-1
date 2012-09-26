@@ -7,9 +7,13 @@ public class Rabbit {
 	private int energy;
 	private World worldSpace;
 	
-	public void setPosition(int _x,int _y){
-		x = _x;
-		y = _y;
+	public Rabbit() {
+		System.out.println("Create new rabbit");
+	}
+	
+	public void setPosXY(int newX,int newY){
+		x = newX;
+		y = newY;
 	}
 	
 	public int getPositionX() {
@@ -32,7 +36,10 @@ public class Rabbit {
 		
 	}
 	
-	public void step() {
+	public void report() {
+		System.out.println("Position x " + x +
+				" and Position y " + y +
+				" with " + energy + " energy.");
 		
 	}
 	
