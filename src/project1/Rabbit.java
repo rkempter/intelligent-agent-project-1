@@ -1,10 +1,5 @@
 package project1;
 
-import java.awt.Color;
-
-import uchicago.src.sim.gui.Drawable;
-import uchicago.src.sim.gui.SimGraphics;
-import uchicago.src.sim.space.Object2DGrid;
 
 public class Rabbit {
 	
@@ -63,6 +58,9 @@ public class Rabbit {
 	
 	public int getEnergy(){
 		return energy;
+	}
+	public void setEnergy(int _energy) {
+		energy = _energy;
 	}
 	
 	public void report() {

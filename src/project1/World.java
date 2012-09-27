@@ -62,7 +62,7 @@ public class World {
 	public boolean placeRabbit(Rabbit rabbit) {
 		boolean addedRabbit = false;
 		int nbrFields = rabbitSpace.getSizeX() * rabbitSpace.getSizeY(), i = 0;
-		Vector pointVector = new Vector();
+		Vector<Point> pointVector = new Vector<Point>();
 		
 		
 		while(i < nbrFields || addedRabbit == true) {
