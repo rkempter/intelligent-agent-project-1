@@ -57,7 +57,7 @@ public class Rabbit {
 			worldSpace.removeRabbitAt(x, y);
 			x = newX;
 			y = newY;
-			worldSpace.placeRabbit(this);
+			worldSpace.checkRabbitIn(this);
 		}
 	}
 	

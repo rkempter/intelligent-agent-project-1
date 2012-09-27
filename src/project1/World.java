@@ -2,6 +2,8 @@ package project1;
 
 import project1.Rabbit;
 import uchicago.src.sim.space.Object2DGrid;
+import java.util.Vector;
+import java.awt.Point;
 
 public class World {
 	//to fix. Figure out if the grass energy is a parameter or a fix value
@@ -57,18 +59,37 @@ public class World {
 		rabbitSpace.putObjectAt(x, y, null);
 	}
 	
-	public boolean placeRabbit(Rabbit rabbit){
-		//add rabbit to the cell if the cell is free (to be used when a rabbit moves or for a new rabbit)
+	public boolean placeRabbit(Rabbit rabbit) {
 		boolean addedRabbit = false;
+		int nbrFields = rabbitSpace.getSizeX() * rabbitSpace.getSizeY(), i = 0;
+		Vector pointVector = new Vector();
 		
-		int x = (int)(Math.random()*(rabbitSpace.getSizeX()));
-		int y = (int)(Math.random()*(rabbitSpace.getSizeY()));
-		if(checkIfRabbitOn(x, y) == false){
-			rabbitSpace.putObjectAt(x, y, rabbit);
-			rabbit.setPosXY(x, y);
-			addedRabbit = true;
+		
+		while(i < nbrFields || addedRabbit == true) {
+			int x = (int)(Math.random()*(rabbitSpace.getSizeX()));
+			int y = (int)(Math.random()*(rabbitSpace.getSizeY()));
+			Point point = new Point(x, y);
+			
+			if(pointVector.contains(point)) {
+				if(!checkIfRabbitOn(x, y)) {
+					rabbitSpace.putObjectAt(x, y, rabbit);
+					rabbit.setPosXY(x, y);
+					addedRabbit = true;
+				} else {
+					pointVector.add(point);
+				}
+			}
 		}
+		
 		return addedRabbit;
+	}
+	
+	
+	public void checkRabbitIn(Rabbit rabbit) {
+		int x = rabbit.getPositionX();
+		int y = rabbit.getPositionY();
+		
+		rabbitSpace.putObjectAt(x, y, rabbit);
 	}
 	
 	public int checkBoundryX(int x) {
