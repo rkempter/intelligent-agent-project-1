@@ -13,8 +13,9 @@ public class Rabbit {
 	private int energy;
 	private World worldSpace;
 	
-	public Rabbit() {
+	public Rabbit(int en) {
 		System.out.println("Create new rabbit");
+		energy = en;
 	}
 	
 	public void setPosXY(int newX,int newY){
@@ -36,6 +37,10 @@ public class Rabbit {
 	
 	public void eatGrass() {
 		energy += worldSpace.eatGrassAt(x,y);
+	}
+	
+	public void draw(SimGraphics G){
+		G.drawFastRoundRect(Color.blue);
 	}
 	
 	public void moveRabbit() {

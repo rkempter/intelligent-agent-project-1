@@ -28,7 +28,7 @@ public class Model extends SimModelImpl{
 	private static final int REPRODUCTIONCOST = 5;
 	private static final int INITIALGRASS = 30;
 	private static final int GRASSGROWTHRATE = 10;
-
+	private static final int INITIALENERGY = 10;
 
 
 	private int numRabbits = NUMRABBITS;
@@ -37,6 +37,7 @@ public class Model extends SimModelImpl{
 	private int reproductionCost = REPRODUCTIONCOST;
 	private int initialGrass = INITIALGRASS;
 	private int GrassGrowthRate = GRASSGROWTHRATE;
+	private int initialEnergy = INITIALENERGY;
 
 
 	public String getName(){
@@ -127,7 +128,7 @@ public class Model extends SimModelImpl{
 		for(int i = rabbitList.size()-1; i >= 0; i--){
 			Rabbit rabbit = (Rabbit)rabbitList.get(i);
 			if(rabbit.getEnergy() >= 6 ){
-				Rabbit newRabbit= new Rabbit();
+				Rabbit newRabbit= new Rabbit(initialEnergy);
 				if(worldSpace.placeRabbit(newRabbit)){
 					rabbit.setEnergy(rabbit.getEnergy()- reproductionCost);
 					rabbitList.add(newRabbit);
@@ -177,7 +178,7 @@ public class Model extends SimModelImpl{
 
 	public String[] getInitParam(){
 		System.out.println("Init parameters");
-		String[] initParams = { "NumRabbits", "WorldXSize", "WorldYSize", "ReproductionCost", "initialGrass", "GrassGrowthRate" };
+		String[] initParams = { "NumRabbits", "InitialEnergy", "WorldXSize", "WorldYSize", "ReproductionCost", "initialGrass", "GrassGrowthRate" };
 		return initParams;
 	}
 
@@ -187,6 +188,14 @@ public class Model extends SimModelImpl{
 
 	public void setNumRabbits(int na){
 		numRabbits = na;
+	}
+	
+	public int getInitialEnergy(){
+		return initialEnergy;
+	}
+
+	public void setInitialEnergy(int en){
+		initialEnergy = en;
 	}
 
 	public int getWorldXSize() {
@@ -229,9 +238,10 @@ public class Model extends SimModelImpl{
 	}
 
 	public void addNewRabbit() {
-		Rabbit r = new Rabbit();
+		Rabbit r = new Rabbit(initialEnergy);
 		rabbitList.add(r);
 		worldSpace.placeRabbit(r);
+		r.report();
 	}
 
 	public static void main(String[] args) {
