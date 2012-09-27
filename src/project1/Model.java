@@ -36,15 +36,17 @@ public class Model extends SimModelImpl{
 	private int worldYSize = WORLDYSIZE;
 	private int reproductionCost = REPRODUCTIONCOST;
 	private int initialGrass = INITIALGRASS;
+
+
 	private int GrassGrowthRate = GRASSGROWTHRATE;
 
 
 	public String getName(){
-		return "Rabbits Simulation";
+		return "Rabbits World Simulator";
 	}
 
 	public void setup(){
-		System.out.println("Setup of System");
+		System.out.println("System Setup");
 		worldSpace = null;
 		rabbitList = new ArrayList<Rabbit>();
 
@@ -53,9 +55,9 @@ public class Model extends SimModelImpl{
 		}
 		displaySurf = null;
 
-		displaySurf = new DisplaySurface(this, "Rabbit World Window 1");
+		displaySurf = new DisplaySurface(this, "Rabbit World Simulator");
 
-		registerDisplaySurface("Rabbit World Window 1", displaySurf);
+		registerDisplaySurface("Rabbit World Simulator", displaySurf);
 	}
 
 	public void begin(){
@@ -93,6 +95,7 @@ public class Model extends SimModelImpl{
 					rabbit.report();
 				}
 				makeRabbitReproduction();
+				displaySurf.updateDisplay();
 			}
 		}
 
@@ -101,6 +104,7 @@ public class Model extends SimModelImpl{
 		class LivingRabbit extends BasicAction {
 			public void execute(){
 				livingRabbits();
+				displaySurf.updateDisplay();
 			}
 		}
 
@@ -174,7 +178,7 @@ public class Model extends SimModelImpl{
 
 	public String[] getInitParam(){
 		System.out.println("Init parameters");
-		String[] initParams = { "NumRabbits", "WorldXSize", "WorldYSize", "ReproductionCost" };
+		String[] initParams = { "NumRabbits", "WorldXSize", "WorldYSize", "ReproductionCost", "initialGrass", "GrassGrowthRate" };
 		return initParams;
 	}
 
@@ -216,6 +220,13 @@ public class Model extends SimModelImpl{
 
 	public void setGrassGrowthRate(int grassGrowthRate) {
 		GrassGrowthRate = grassGrowthRate;
+	}
+	public int getInitialGrass() {
+		return initialGrass;
+	}
+
+	public void setInitialGrass(int initialGrass) {
+		this.initialGrass = initialGrass;
 	}
 
 	public void addNewRabbit() {

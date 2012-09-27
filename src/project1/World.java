@@ -64,7 +64,7 @@ public class World {
 		int nbrFields = rabbitSpace.getSizeX() * rabbitSpace.getSizeY();
 		int i = 0;
 		System.out.println("Number of fields: "+nbrFields);
-		
+
 		Vector<Point> pointVector = new Vector<Point>();
 		
 		while(i < nbrFields && addedRabbit == false) {
