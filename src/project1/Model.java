@@ -88,8 +88,8 @@ public class Model extends SimModelImpl{
 				deleteDeadrabbits();
 
 				SimUtilities.shuffle(rabbitList);
-				for(int i =0; i < rabbitList.size(); i++){
-					Rabbit rabbit = (Rabbit)rabbitList.get(i);
+				for(int i = 0; i < rabbitList.size(); i++){
+					Rabbit rabbit = rabbitList.get(i);
 					rabbit.moveRabbit();
 					rabbit.eatGrass();
 					rabbit.report();
@@ -128,7 +128,7 @@ public class Model extends SimModelImpl{
 		for(int i = rabbitList.size()-1; i >= 0; i--){
 			Rabbit rabbit = (Rabbit)rabbitList.get(i);
 			if(rabbit.getEnergy() >= 6 ){
-				Rabbit newRabbit= new Rabbit(initialEnergy);
+				Rabbit newRabbit= new Rabbit(initialEnergy, worldSpace);
 				if(worldSpace.placeRabbit(newRabbit)){
 					rabbit.setEnergy(rabbit.getEnergy()- reproductionCost);
 					rabbitList.add(newRabbit);
@@ -238,7 +238,7 @@ public class Model extends SimModelImpl{
 	}
 
 	public void addNewRabbit() {
-		Rabbit r = new Rabbit(initialEnergy);
+		Rabbit r = new Rabbit(initialEnergy, worldSpace);
 		rabbitList.add(r);
 		worldSpace.placeRabbit(r);
 		r.report();

@@ -98,7 +98,7 @@ public class World {
 	}
 	
 	public int checkBoundryX(int x) {
-		int max = rabbitSpace.getSizeX();
+		int max = rabbitSpace.getSizeX();	
 		
 		if(x > max) {
 			return x - max;

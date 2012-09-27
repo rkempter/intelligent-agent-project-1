@@ -13,9 +13,10 @@ public class Rabbit {
 	private int energy;
 	private World worldSpace;
 	
-	public Rabbit(int en) {
+	public Rabbit(int en, World ws) {
 		System.out.println("Create new rabbit");
 		energy = en;
+		worldSpace = ws;
 	}
 	
 	public void setPosXY(int newX,int newY){
@@ -54,6 +55,8 @@ public class Rabbit {
 		} else {
 			vy = (int) Math.floor(Math.random());
 		}
+		
+		System.out.println("X direction "+vx+" y direction "+vy);
 		
 		int newX = worldSpace.checkBoundryX(x+vx);
 		int newY = worldSpace.checkBoundryY(y+vy);
