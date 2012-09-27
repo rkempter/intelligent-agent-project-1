@@ -3,8 +3,6 @@ package project1;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import carryDrop.CarryDropAgent;
-
 import uchicago.src.sim.engine.BasicAction;
 import uchicago.src.sim.engine.Schedule;
 import uchicago.src.sim.engine.SimInit;
@@ -28,13 +26,18 @@ public class Model extends SimModelImpl{
 	private static final int WORLDXSIZE = 20;
 	private static final int WORLDYSIZE = 20;
 	private static final int REPRODUCTIONCOST = 5;
-	private static final int INITIALGRASS = 5;
+	private static final int INITIALGRASS = 30;
+	private static final int GRASSGROWTHRATE = 10;
+
+	
 
 	private int numRabbits = NUMRABBITS;
 	private int worldXSize = WORLDXSIZE;
 	private int worldYSize = WORLDYSIZE;
 	private int reproductionCost = REPRODUCTIONCOST;
 	private int initialGrass = INITIALGRASS;
+	private int GrassGrowthRate = GRASSGROWTHRATE;
+
 
 	public String getName(){
 		return "Rabbits Simulation";
@@ -65,8 +68,10 @@ public class Model extends SimModelImpl{
 
 	public void buildModel(){
 		System.out.println("Running BuildModel");
+		
 		worldSpace = new World(worldXSize, worldYSize);
-
+		worldSpace.growGrass(initialGrass);
+		
 		for(int i = 0; i < numRabbits; i++) {
 			addNewRabbit();
 		}
@@ -78,17 +83,21 @@ public class Model extends SimModelImpl{
 
 		class worldStep extends BasicAction {
 			public void execute() {
+				worldSpace.growGrass(GrassGrowthRate);
+				deleteDeadrabbits();
+				
 				SimUtilities.shuffle(rabbitList);
 				for(int i =0; i < rabbitList.size(); i++){
 					Rabbit rabbit = (Rabbit)rabbitList.get(i);
 					rabbit.moveRabbit();
 				}
-				//call function to make the rabbit reproducing
+
+				makeRabbitReproduction();
 			}
 		}
 
-		schedule.scheduleActionBeginning(0, new worldStep());
-
+		schedule.scheduleActionBeginning(0, new worldStep());		
+		
 		class LivingRabbit extends BasicAction {
 			public void execute(){
 				livingRabbits();
@@ -97,6 +106,23 @@ public class Model extends SimModelImpl{
 
 		schedule.scheduleActionAtInterval(10, new LivingRabbit());
 	}
+	private int deleteDeadrabbits(){
+		int deadRabbits = 0;		
+		for(int i = (rabbitList.size() - 1); i >= 0 ; i--){
+			Rabbit rabbit = (Rabbit)rabbitList.get(i);
+			if(rabbit.getEnergy() ==0){
+				worldSpace.removeRabbitAt(rabbit.getPositionX(), rabbit.getPositionY());
+				rabbitList.remove(i);
+				deadRabbits++;
+			}
+		}
+		System.out.println("Number of dead rabbits is: " + deadRabbits);
+		return deadRabbits;
+	}
+	private int makeRabbitReproduction(){
+		
+	}
+	
 	
 	private int livingRabbits(){
 		int livingRabbits = 0;
@@ -104,13 +130,11 @@ public class Model extends SimModelImpl{
 			Rabbit rabbit = (Rabbit)rabbitList.get(i);
 			if(rabbit.getEnergy() > 0) livingRabbits++;
 		}
-		System.out.println("Number of living agents is: " + livingRabbits);
+		System.out.println("Number of living rabbits is: " + livingRabbits);
 
 		return livingRabbits;
 	}
-	
-	
-	
+
 	public void buildDisplay(){
 		System.out.println("Running BuildDisplay");
 
@@ -168,6 +192,14 @@ public class Model extends SimModelImpl{
 	public void setReproductionCost(int rc) {
 		reproductionCost = rc;
 	}
+	
+	public int getGrassGrowthRate() {
+		return GrassGrowthRate;
+	}
+
+	public void setGrassGrowthRate(int grassGrowthRate) {
+		GrassGrowthRate = grassGrowthRate;
+	}
 
 	public void addNewRabbit() {
 		Rabbit r = new Rabbit();
@@ -181,10 +213,5 @@ public class Model extends SimModelImpl{
 		init.loadModel(model, null, false);
 	}
 
-	public void step() {
-		// grass grow
-		// each rabbit less energy
-		// each rabbit move or eat, reproduce or die
-	}
 
 }
