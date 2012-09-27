@@ -34,6 +34,10 @@ public class Rabbit {
 	
 	public void moveRabbit() {
 		
+		
+	}
+	public int getEnergy(){
+		return energy;
 	}
 	
 	public void report() {
