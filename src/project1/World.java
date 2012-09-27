@@ -70,6 +70,31 @@ public class World {
 		}
 		return addedRabbit;
 	}
+	
+	public int checkBoundryX(int x) {
+		int max = rabbitSpace.getSizeX();
+		
+		if(x > max) {
+			return x - max;
+		} else if (x < 0) {
+			return x + max;
+		} else {
+			return x;
+		}
+	}
+	
+	public int checkBoundryY(int y) {
+		int max = rabbitSpace.getSizeY();
+		
+		if(y > max) {
+			return y - max;
+		} else if (y < 0) {
+			return y + max;
+		} else {
+			return y;
+		}
+	}
+	
 
 	public Object2DGrid getCurrentGrassSpace() {
 	    return grassSpace;
