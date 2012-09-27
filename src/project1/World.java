@@ -61,17 +61,22 @@ public class World {
 	
 	public boolean placeRabbit(Rabbit rabbit) {
 		boolean addedRabbit = false;
-		int nbrFields = rabbitSpace.getSizeX() * rabbitSpace.getSizeY(), i = 0;
+		int nbrFields = rabbitSpace.getSizeX() * rabbitSpace.getSizeY();
+		int i = 0;
+		System.out.println("Number of fields: "+nbrFields);
+		
 		Vector<Point> pointVector = new Vector<Point>();
 		
-		
-		while(i < nbrFields || addedRabbit == true) {
-			int x = (int)(Math.random()*(rabbitSpace.getSizeX()));
-			int y = (int)(Math.random()*(rabbitSpace.getSizeY()));
+		while(i < nbrFields && addedRabbit == false) {
+			int x = (int) (Math.random()*(rabbitSpace.getSizeX()));
+			int y = (int) (Math.random()*(rabbitSpace.getSizeY()));
 			Point point = new Point(x, y);
+			System.out.println("Point (x) "+point.x+" and (y) "+point.y);
 			
-			if(pointVector.contains(point)) {
-				if(!checkIfRabbitOn(x, y)) {
+			if(false == pointVector.contains(point)) {
+				System.out.println("Point is not in list");
+				if(false == checkIfRabbitOn(x, y)) {
+					System.out.println("Field is free");
 					rabbit.setPosXY(x, y);
 					checkRabbitIn(rabbit);
 					addedRabbit = true;

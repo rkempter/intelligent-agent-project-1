@@ -67,7 +67,6 @@ public class Rabbit {
 		System.out.println("Position x " + x +
 				" and Position y " + y +
 				" with " + energy + " energy.");
-		
 	}
 	
 	

@@ -90,6 +90,7 @@ public class Model extends SimModelImpl{
 					Rabbit rabbit = (Rabbit)rabbitList.get(i);
 					rabbit.moveRabbit();
 					rabbit.eatGrass();
+					rabbit.report();
 				}
 				makeRabbitReproduction();
 			}
