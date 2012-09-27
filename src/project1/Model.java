@@ -130,6 +130,7 @@ public class Model extends SimModelImpl{
 			if(rabbit.getEnergy() >= 6 ){
 				Rabbit newRabbit= new Rabbit(initialEnergy);
 				if(worldSpace.placeRabbit(newRabbit)){
+					newRabbit.setWorld(worldSpace);
 					rabbit.setEnergy(rabbit.getEnergy()- reproductionCost);
 					rabbitList.add(newRabbit);
 					newRabbits++;
@@ -239,6 +240,7 @@ public class Model extends SimModelImpl{
 
 	public void addNewRabbit() {
 		Rabbit r = new Rabbit(initialEnergy);
+		r.setWorld(worldSpace);
 		rabbitList.add(r);
 		worldSpace.placeRabbit(r);
 		r.report();

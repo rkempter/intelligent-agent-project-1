@@ -63,7 +63,6 @@ public class World {
 		boolean addedRabbit = false;
 		int nbrFields = rabbitSpace.getSizeX() * rabbitSpace.getSizeY();
 		int i = 0;
-		System.out.println("Number of fields: "+nbrFields);
 
 		Vector<Point> pointVector = new Vector<Point>();
 		
@@ -71,12 +70,9 @@ public class World {
 			int x = (int) (Math.random()*(rabbitSpace.getSizeX()));
 			int y = (int) (Math.random()*(rabbitSpace.getSizeY()));
 			Point point = new Point(x, y);
-			System.out.println("Point (x) "+point.x+" and (y) "+point.y);
 			
 			if(false == pointVector.contains(point)) {
-				System.out.println("Point is not in list");
 				if(false == checkIfRabbitOn(x, y)) {
-					System.out.println("Field is free");
 					rabbit.setPosXY(x, y);
 					checkRabbitIn(rabbit);
 					addedRabbit = true;
@@ -85,21 +81,18 @@ public class World {
 				}
 			}
 		}
-		
 		return addedRabbit;
 	}
 	
 	
 	public void checkRabbitIn(Rabbit rabbit) {
 		int x = rabbit.getPositionX();
-		int y = rabbit.getPositionY();
-		
+		int y = rabbit.getPositionY();	
 		rabbitSpace.putObjectAt(x, y, rabbit);
 	}
 	
 	public int checkBoundryX(int x) {
 		int max = rabbitSpace.getSizeX();
-		
 		if(x > max) {
 			return x - max;
 		} else if (x < 0) {
@@ -124,5 +117,8 @@ public class World {
 
 	public Object2DGrid getCurrentGrassSpace() {
 	    return grassSpace;
+	}
+	public Object2DGrid getCurrentRabbitSpace() {
+	    return rabbitSpace;
 	}
 }
