@@ -8,7 +8,9 @@ public class Rabbit {
 	private World worldSpace;
 	
 	public Rabbit() {
+		energy= (int)(Math.random()* 6);		//random init energy
 		System.out.println("Create new rabbit");
+
 	}
 	
 	public void setPosXY(int newX,int newY){
@@ -35,6 +37,9 @@ public class Rabbit {
 	public void moveRabbit() {
 		
 		
+	}
+	public void setEnergy(int en){
+		energy= en;
 	}
 	public int getEnergy(){
 		return energy;
