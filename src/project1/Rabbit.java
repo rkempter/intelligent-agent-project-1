@@ -3,17 +3,22 @@ package project1;
 import java.awt.Color;
 
 import uchicago.src.sim.gui.SimGraphics;
+import uchicago.src.sim.gui.Drawable;
+import java.util.Random;
 
-public class Rabbit {
+
+public class Rabbit implements Drawable{
 	
 	private int x;
 	private int y;
 	private int energy;
+	private static int maxInitialEnergy= 10;
+	private static int minInitialEnergy= 5;
+
 	private World worldSpace;
 	
-	public Rabbit(int en) {
-		System.out.println("Create new rabbit");
-		energy = en;
+	public Rabbit() {
+		energy = minInitialEnergy + (int)(Math.random()*maxInitialEnergy);
 	}
 	
 	public void setPosXY(int newX,int newY){
@@ -42,25 +47,32 @@ public class Rabbit {
 	}
 	
 	public void moveRabbit() {
+		int directions[]= {-1,0,1};
 		int vx = 0;
 		int vy = 0;
 		
-		vx = (int) Math.floor(Math.random());
-		
-		if (vx > 0) {
+		Random rand = new Random();
+		vx= directions[rand.nextInt( directions.length)];		
+		if (vx != 0) {
 			vy = 0;
 		} else {
-			vy = (int) Math.floor(Math.random());
+			vy = directions[rand.nextInt( directions.length)];
 		}
+		
 		int newX = worldSpace.checkBoundryX(x+vx);
 		int newY = worldSpace.checkBoundryY(y+vy);
 		
-		if(worldSpace.checkIfRabbitOn(newX, newY)) {
+		if(!worldSpace.checkIfRabbitOn(newX, newY)) {
 			worldSpace.removeRabbitAt(x, y);
+			//System.out.println("old coordinates: "+x+", "+y+" => "+ "new coordinates: "+newX+", "+newY);
 			x = newX;
 			y = newY;
-			worldSpace.checkRabbitIn(this);
+			worldSpace.placeRabbitIn(this);
 		}
+		consumeEnergy();
+	}
+	public void consumeEnergy(){
+		energy-= 1;
 	}
 	
 	public int getEnergy(){
@@ -69,6 +81,16 @@ public class Rabbit {
 	
 	public void setEnergy(int en) {
 		energy = en;
+	}
+
+	@Override
+	public int getX() {
+		return x;
+	}
+
+	@Override
+	public int getY() {
+		return y;
 	}
 	
 	public void report() {

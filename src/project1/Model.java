@@ -9,6 +9,7 @@ import uchicago.src.sim.engine.SimInit;
 import uchicago.src.sim.engine.SimModelImpl;
 import uchicago.src.sim.gui.DisplaySurface;
 import uchicago.src.sim.gui.ColorMap;
+import uchicago.src.sim.gui.Object2DDisplay;
 import uchicago.src.sim.gui.Value2DDisplay;
 import uchicago.src.sim.util.SimUtilities;
 
@@ -25,10 +26,9 @@ public class Model extends SimModelImpl{
 	private static final int NUMRABBITS = 20;
 	private static final int WORLDXSIZE = 20;
 	private static final int WORLDYSIZE = 20;
-	private static final int REPRODUCTIONCOST = 5;
+	private static final int REPRODUCTIONCOST = 10;
 	private static final int INITIALGRASS = 30;
 	private static final int GRASSGROWTHRATE = 10;
-	private static final int INITIALENERGY = 10;
 
 
 	private int numRabbits = NUMRABBITS;
@@ -37,7 +37,6 @@ public class Model extends SimModelImpl{
 	private int reproductionCost = REPRODUCTIONCOST;
 	private int initialGrass = INITIALGRASS;
 	private int GrassGrowthRate = GRASSGROWTHRATE;
-	private int initialEnergy = INITIALENERGY;
 
 
 	public String getName(){
@@ -54,7 +53,6 @@ public class Model extends SimModelImpl{
 			displaySurf.dispose();
 		}
 		displaySurf = null;
-
 		displaySurf = new DisplaySurface(this, "Rabbit World Simulator");
 
 		registerDisplaySurface("Rabbit World Simulator", displaySurf);
@@ -92,7 +90,7 @@ public class Model extends SimModelImpl{
 					Rabbit rabbit = (Rabbit)rabbitList.get(i);
 					rabbit.moveRabbit();
 					rabbit.eatGrass();
-					rabbit.report();
+					//rabbit.report();
 				}
 				makeRabbitReproduction();
 				displaySurf.updateDisplay();
@@ -107,7 +105,6 @@ public class Model extends SimModelImpl{
 				displaySurf.updateDisplay();
 			}
 		}
-
 		schedule.scheduleActionAtInterval(10, new LivingRabbit());
 	}
 	private int deleteDeadrabbits(){
@@ -127,9 +124,9 @@ public class Model extends SimModelImpl{
 		int newRabbits = 0;
 		for(int i = rabbitList.size()-1; i >= 0; i--){
 			Rabbit rabbit = (Rabbit)rabbitList.get(i);
-			if(rabbit.getEnergy() >= 6 ){
-				Rabbit newRabbit= new Rabbit(initialEnergy);
-				if(worldSpace.placeRabbit(newRabbit)){
+			if(rabbit.getEnergy() > reproductionCost ){
+				Rabbit newRabbit= new Rabbit();
+				if(worldSpace.findPlaceRabbit(newRabbit)){
 					newRabbit.setWorld(worldSpace);
 					rabbit.setEnergy(rabbit.getEnergy()- reproductionCost);
 					rabbitList.add(newRabbit);
@@ -168,9 +165,11 @@ public class Model extends SimModelImpl{
 		map.mapColor(0, Color.white);
 
 		Value2DDisplay displayGrass = new Value2DDisplay(worldSpace.getCurrentGrassSpace(), map);
-
 		displaySurf.addDisplayable(displayGrass, "Grass");
-
+		
+		Object2DDisplay displayRabbit = new Object2DDisplay(worldSpace.getCurrentRabbitSpace());
+		displayRabbit.setObjectList(rabbitList);
+		displaySurf.addDisplayable(displayRabbit, "Rabbit");
 	}
 
 	public Schedule getSchedule(){
@@ -189,14 +188,6 @@ public class Model extends SimModelImpl{
 
 	public void setNumRabbits(int na){
 		numRabbits = na;
-	}
-	
-	public int getInitialEnergy(){
-		return initialEnergy;
-	}
-
-	public void setInitialEnergy(int en){
-		initialEnergy = en;
 	}
 
 	public int getWorldXSize() {
@@ -239,11 +230,10 @@ public class Model extends SimModelImpl{
 	}
 
 	public void addNewRabbit() {
-		Rabbit r = new Rabbit(initialEnergy);
+		Rabbit r = new Rabbit();
 		r.setWorld(worldSpace);
 		rabbitList.add(r);
-		worldSpace.placeRabbit(r);
-		r.report();
+		worldSpace.findPlaceRabbit(r);
 	}
 
 	public static void main(String[] args) {

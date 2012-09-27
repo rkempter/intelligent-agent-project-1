@@ -8,6 +8,8 @@ import java.awt.Point;
 public class World {
 	//to fix. Figure out if the grass energy is a parameter or a fix value
 	private static final int MaxGrassEnergy = 5;
+	private static final int MinGrassEnergy = 2;
+
 
 	private Object2DGrid grassSpace;
 	private Object2DGrid rabbitSpace;
@@ -28,8 +30,8 @@ public class World {
 		for(int i = 0; i < grassAmount; i++){
 			int x = (int)(Math.random()*(grassSpace.getSizeX()));
 			int y = (int)(Math.random()*(grassSpace.getSizeY()));
-			int grassEnergy = (int)(Math.random()* MaxGrassEnergy);
-
+			int grassEnergy =  MaxGrassEnergy + (int)(Math.random()*MinGrassEnergy);
+			
 			grassSpace.putObjectAt(x,y,new Integer(grassEnergy));
 		}
 	}
@@ -59,7 +61,7 @@ public class World {
 		rabbitSpace.putObjectAt(x, y, null);
 	}
 	
-	public boolean placeRabbit(Rabbit rabbit) {
+	public boolean findPlaceRabbit(Rabbit rabbit) {
 		boolean addedRabbit = false;
 		int nbrFields = rabbitSpace.getSizeX() * rabbitSpace.getSizeY();
 		int i = 0;
@@ -69,14 +71,14 @@ public class World {
 		while(i < nbrFields && addedRabbit == false) {
 			int x = (int) (Math.random()*(rabbitSpace.getSizeX()));
 			int y = (int) (Math.random()*(rabbitSpace.getSizeY()));
-			Point point = new Point(x, y);
-			
+			Point point = new Point(x, y);	
 			if(false == pointVector.contains(point)) {
 				if(false == checkIfRabbitOn(x, y)) {
 					rabbit.setPosXY(x, y);
-					checkRabbitIn(rabbit);
+					placeRabbitIn(rabbit);
 					addedRabbit = true;
 				} else {
+					i++;
 					pointVector.add(point);
 				}
 			}
@@ -85,7 +87,7 @@ public class World {
 	}
 	
 	
-	public void checkRabbitIn(Rabbit rabbit) {
+	public void placeRabbitIn(Rabbit rabbit) {
 		int x = rabbit.getPositionX();
 		int y = rabbit.getPositionY();	
 		rabbitSpace.putObjectAt(x, y, rabbit);
@@ -93,10 +95,10 @@ public class World {
 	
 	public int checkBoundryX(int x) {
 		int max = rabbitSpace.getSizeX();
-		if(x > max) {
-			return x - max;
+		if(x >= max) {
+			return x - 1;
 		} else if (x < 0) {
-			return x + max;
+			return x + 1;
 		} else {
 			return x;
 		}
@@ -105,10 +107,10 @@ public class World {
 	public int checkBoundryY(int y) {
 		int max = rabbitSpace.getSizeY();
 		
-		if(y > max) {
-			return y - max;
+		if(y >= max) {
+			return y - 1;
 		} else if (y < 0) {
-			return y + max;
+			return y + 1;
 		} else {
 			return y;
 		}
