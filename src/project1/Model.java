@@ -36,8 +36,6 @@ public class Model extends SimModelImpl{
 	private int worldYSize = WORLDYSIZE;
 	private int reproductionCost = REPRODUCTIONCOST;
 	private int initialGrass = INITIALGRASS;
-
-
 	private int GrassGrowthRate = GRASSGROWTHRATE;
 
 
@@ -47,6 +45,7 @@ public class Model extends SimModelImpl{
 
 	public void setup(){
 		System.out.println("System Setup");
+		schedule = new Schedule(1);
 		worldSpace = null;
 		rabbitList = new ArrayList<Rabbit>();
 
