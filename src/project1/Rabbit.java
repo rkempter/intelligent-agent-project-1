@@ -1,5 +1,11 @@
 package project1;
 
+import java.awt.Color;
+
+import uchicago.src.sim.gui.Drawable;
+import uchicago.src.sim.gui.SimGraphics;
+import uchicago.src.sim.space.Object2DGrid;
+
 public class Rabbit {
 	
 	private int x;
@@ -33,7 +39,26 @@ public class Rabbit {
 	}
 	
 	public void moveRabbit() {
+		int vx = 0;
+		int vy = 0;
 		
+		vx = (int) Math.floor(Math.random());
+		
+		if (vx > 0) {
+			vy = 0;
+		} else {
+			vy = (int) Math.floor(Math.random());
+		}
+		
+		int newX = worldSpace.checkBoundryX(x+vx);
+		int newY = worldSpace.checkBoundryY(y+vy);
+		
+		if(worldSpace.checkIfRabbitOn(newX, newY)) {
+			worldSpace.removeRabbitAt(x, y);
+			x = newX;
+			y = newY;
+			worldSpace.placeRabbit(this);
+		}
 	}
 	
 	public void report() {
