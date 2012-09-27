@@ -3,6 +3,10 @@ package project1;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import uchicago.src.sim.analysis.DataSource;
+import uchicago.src.sim.analysis.OpenSequenceGraph;
+import uchicago.src.sim.analysis.Sequence;
+
 import uchicago.src.sim.engine.BasicAction;
 import uchicago.src.sim.engine.Schedule;
 import uchicago.src.sim.engine.SimInit;
@@ -38,6 +42,19 @@ public class Model extends SimModelImpl{
 	private int initialGrass = INITIALGRASS;
 	private int GrassGrowthRate = GRASSGROWTHRATE;
 
+	private OpenSequenceGraph RabbitPopulation;
+
+	class RabbitOnPlace implements DataSource, Sequence {
+
+		public Object execute() {
+			return new Double(getSValue());
+		}
+
+		public double getSValue() {
+			return (double)worldSpace.RabbitPopulation();
+		}
+	}
+
 
 	public String getName(){
 		return "Rabbits World Simulator";
@@ -54,8 +71,16 @@ public class Model extends SimModelImpl{
 		}
 		displaySurf = null;
 		displaySurf = new DisplaySurface(this, "Rabbit World Simulator");
-
 		registerDisplaySurface("Rabbit World Simulator", displaySurf);
+
+
+		if (RabbitPopulation != null){
+			RabbitPopulation.dispose();
+		}
+		RabbitPopulation = null;
+		RabbitPopulation = new OpenSequenceGraph("Rabbit population",this);
+		this.registerMediaProducer("Plot", RabbitPopulation);
+
 	}
 
 	public void begin(){
@@ -64,6 +89,8 @@ public class Model extends SimModelImpl{
 		buildDisplay();
 
 		displaySurf.display();
+		RabbitPopulation.display();
+
 	}
 
 	public void buildModel(){
@@ -97,7 +124,15 @@ public class Model extends SimModelImpl{
 			}
 		}
 
-		schedule.scheduleActionBeginning(0, new worldStep());		
+		schedule.scheduleActionBeginning(0, new worldStep());
+		
+	    class UpdateRabbitPopulationInSpace extends BasicAction {
+	        public void execute(){
+	        	RabbitPopulation.step();
+	        }
+	      }
+
+	      schedule.scheduleActionAtInterval(10, new UpdateRabbitPopulationInSpace());
 
 		class LivingRabbit extends BasicAction {
 			public void execute(){
@@ -166,10 +201,12 @@ public class Model extends SimModelImpl{
 
 		Value2DDisplay displayGrass = new Value2DDisplay(worldSpace.getCurrentGrassSpace(), map);
 		displaySurf.addDisplayable(displayGrass, "Grass");
-		
+
 		Object2DDisplay displayRabbit = new Object2DDisplay(worldSpace.getCurrentRabbitSpace());
 		displayRabbit.setObjectList(rabbitList);
 		displaySurf.addDisplayable(displayRabbit, "Rabbit");
+		
+		RabbitPopulation.addSequence("Rabbit Population", new RabbitOnPlace());
 	}
 
 	public Schedule getSchedule(){

@@ -115,6 +115,17 @@ public class World {
 			return y;
 		}
 	}
+	public int RabbitPopulation(){
+		int population= 0;
+		for (int i=0; i<rabbitSpace.getSizeX(); i++){
+			for (int j=0; j<rabbitSpace.getSizeY(); j++){
+				if(rabbitSpace.getObjectAt(i, j)!=null){
+					population+= 1;
+				}
+			}
+		}
+		return population;
+	}
 	
 
 	public Object2DGrid getCurrentGrassSpace() {
