@@ -72,8 +72,8 @@ public class World {
 			
 			if(pointVector.contains(point)) {
 				if(!checkIfRabbitOn(x, y)) {
-					rabbitSpace.putObjectAt(x, y, rabbit);
 					rabbit.setPosXY(x, y);
+					checkRabbitIn(rabbit);
 					addedRabbit = true;
 				} else {
 					pointVector.add(point);

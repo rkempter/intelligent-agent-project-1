@@ -29,7 +29,7 @@ public class Model extends SimModelImpl{
 	private static final int INITIALGRASS = 30;
 	private static final int GRASSGROWTHRATE = 10;
 
-	
+
 
 	private int numRabbits = NUMRABBITS;
 	private int worldXSize = WORLDXSIZE;
@@ -68,10 +68,10 @@ public class Model extends SimModelImpl{
 
 	public void buildModel(){
 		System.out.println("Running BuildModel");
-		
+
 		worldSpace = new World(worldXSize, worldYSize);
 		worldSpace.growGrass(initialGrass);
-		
+
 		for(int i = 0; i < numRabbits; i++) {
 			addNewRabbit();
 		}
@@ -80,24 +80,23 @@ public class Model extends SimModelImpl{
 	public void buildSchedule(){
 		System.out.println("Running BuildSchedule");
 
-
 		class worldStep extends BasicAction {
 			public void execute() {
 				worldSpace.growGrass(GrassGrowthRate);
 				deleteDeadrabbits();
-				
+
 				SimUtilities.shuffle(rabbitList);
 				for(int i =0; i < rabbitList.size(); i++){
 					Rabbit rabbit = (Rabbit)rabbitList.get(i);
 					rabbit.moveRabbit();
+					rabbit.eatGrass();
 				}
-
 				makeRabbitReproduction();
 			}
 		}
 
 		schedule.scheduleActionBeginning(0, new worldStep());		
-		
+
 		class LivingRabbit extends BasicAction {
 			public void execute(){
 				livingRabbits();
@@ -120,11 +119,27 @@ public class Model extends SimModelImpl{
 		return deadRabbits;
 	}
 	private int makeRabbitReproduction(){
-		int k = 0;
-		return k;
+		int newRabbits = 0;
+		for(int i = rabbitList.size()-1; i >= 0; i--){
+			Rabbit rabbit = (Rabbit)rabbitList.get(i);
+			if(rabbit.getEnergy() >= 6 ){
+				Rabbit newRabbit= new Rabbit();
+				if(worldSpace.placeRabbit(newRabbit)){
+					rabbit.setEnergy(rabbit.getEnergy()- reproductionCost);
+					rabbitList.add(newRabbit);
+					newRabbits++;
+				}
+				else{
+					//grid is full, can not generate new rabbits
+					newRabbit= null;
+				}
+			}
+		}
+		System.out.println("Number of new rabbits is: " + newRabbits);
+		return newRabbits;
 	}
-	
-	
+
+
 	private int livingRabbits(){
 		int livingRabbits = 0;
 		for(int i = 0; i < rabbitList.size(); i++){
@@ -193,7 +208,7 @@ public class Model extends SimModelImpl{
 	public void setReproductionCost(int rc) {
 		reproductionCost = rc;
 	}
-	
+
 	public int getGrassGrowthRate() {
 		return GrassGrowthRate;
 	}
