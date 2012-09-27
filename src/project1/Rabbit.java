@@ -65,6 +65,10 @@ public class Rabbit {
 		return energy;
 	}
 	
+	public void setEnergy(int en) {
+		energy = en;
+	}
+	
 	public void report() {
 		System.out.println("Position x " + x +
 				" and Position y " + y +
