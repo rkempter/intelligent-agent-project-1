@@ -61,6 +61,10 @@ public class Rabbit {
 		}
 	}
 	
+	public int getEnergy(){
+		return energy;
+	}
+	
 	public void report() {
 		System.out.println("Position x " + x +
 				" and Position y " + y +

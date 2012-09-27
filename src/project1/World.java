@@ -21,9 +21,9 @@ public class World {
 		rabbitSpace = new Object2DGrid(xSize, ySize);
 	}
 	
-	public void growGrass(int grassGrowthRate){
+	public void growGrass(int grassAmount){
 		//randomly grows grass in the grid (loops grassGrowthRate times)
-		for(int i = 0; i < grassGrowthRate; i++){
+		for(int i = 0; i < grassAmount; i++){
 			int x = (int)(Math.random()*(grassSpace.getSizeX()));
 			int y = (int)(Math.random()*(grassSpace.getSizeY()));
 			int grassEnergy = (int)(Math.random()* MaxGrassEnergy);
