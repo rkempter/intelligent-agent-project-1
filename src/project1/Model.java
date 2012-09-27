@@ -55,7 +55,7 @@ public class Model extends SimModelImpl{
 
 		displaySurf = new DisplaySurface(this, "Rabbit World Window 1");
 
-		registerDisplaySurface("Rabbit World Window 1", displaySurf);
+		registerDisplaySurface("Rabbit World Simulator", displaySurf);
 	}
 
 	public void begin(){
@@ -92,6 +92,7 @@ public class Model extends SimModelImpl{
 					rabbit.eatGrass();
 				}
 				makeRabbitReproduction();
+				displaySurf.updateDisplay();
 			}
 		}
 
@@ -100,6 +101,7 @@ public class Model extends SimModelImpl{
 		class LivingRabbit extends BasicAction {
 			public void execute(){
 				livingRabbits();
+				displaySurf.updateDisplay();
 			}
 		}
 
