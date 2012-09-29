@@ -31,8 +31,8 @@ public class Model extends SimModelImpl{
 	private static final int WORLDXSIZE = 20;
 	private static final int WORLDYSIZE = 20;
 	private static final int REPRODUCTIONCOST = 10;
-	private static final int INITIALGRASS = 30;
-	private static final int GRASSGROWTHRATE = 10;
+	private static final int INITIALGRASS = 5;
+	private static final int GRASSGROWTHRATE = 1;
 
 
 	private int numRabbits = NUMRABBITS;
@@ -76,7 +76,6 @@ public class Model extends SimModelImpl{
 		displaySurf = new DisplaySurface(this, "Rabbit World Simulator");
 		registerDisplaySurface("Rabbit World Simulator", displaySurf);
 
-
 		if (RabbitPopulation != null){
 			RabbitPopulation.dispose();
 		}
@@ -113,7 +112,7 @@ public class Model extends SimModelImpl{
 	}
 
 	/**
-	 * Cretae Schedule for each step
+	 * Create Schedule for each step
 	 */
 	public void buildSchedule(){
 		System.out.println("Running BuildSchedule");
@@ -125,7 +124,6 @@ public class Model extends SimModelImpl{
 				// Delete all death rabbits
 				deleteDeadrabbits();
 
-				// 
 				SimUtilities.shuffle(rabbitList);
 				for(int i = 0; i < rabbitList.size(); i++) {
 					// Get rabbit instance from the list
@@ -141,7 +139,6 @@ public class Model extends SimModelImpl{
 			}
 		}
 
-		
 		schedule.scheduleActionBeginning(0, new worldStep());
 		
 		/*
@@ -206,7 +203,7 @@ public class Model extends SimModelImpl{
 		ColorMap map = new ColorMap();
 
 		for(int i = 0; i < 16; i++) {
-			map.mapColor(i, new Color((int)(i*8 + 127), 0, 0));
+			map.mapColor(i, new Color(0, (int)(i*15+15), 0));
 		}
 		map.mapColor(0, Color.white);
 
@@ -280,13 +277,12 @@ public class Model extends SimModelImpl{
 
 	public void addNewRabbit() {
 		Rabbit r = new Rabbit();
-		if(worldSpace.findPlaceRabbit(r);) {
+		if(worldSpace.findPlaceRabbit(r)) {
 			r.setWorld(worldSpace);
 			rabbitList.add(r);
 		} else {
 			r = null;
 		}
-		
 	}
 
 	public static void main(String[] args) {

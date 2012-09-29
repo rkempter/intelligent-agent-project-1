@@ -12,10 +12,8 @@ import java.awt.Point;
  */
 
 public class World {
-	private static final int MaxGrassEnergy = 5;
-	private static final int MinGrassEnergy = 0;
-
-
+	private final static int MAXGRASS = 15;
+	
 	private Object2DGrid grassSpace;
 	private Object2DGrid rabbitSpace;
 
@@ -43,7 +41,12 @@ public class World {
 	public void growGrass(int grassGrowRate){
 		for(int x = 0; x < grassSpace.getSizeX(); x++) {
 			for(int y = 0; y < grassSpace.getSizeY(); y++) {
-				grassSpace.putObjectAt(x, y, new Integer(grassGrowRate));
+				int actualGrass = ((Integer) grassSpace.getObjectAt(x,y)).intValue();
+				if(actualGrass+grassGrowRate < MAXGRASS) {
+					grassSpace.putObjectAt(x, y, new Integer(grassGrowRate));
+				} else {
+					grassSpace.putObjectAt(x, y, new Integer(MAXGRASS));
+				}
 			}
 		}
 	}
@@ -55,7 +58,7 @@ public class World {
 	 * @param y
 	 * @return the amount of grass eaten at position xy
 	 */
-	public int eatGrassAt(int x, int y){
+	public int eatGrassAt(int x, int y) {
 		int i = 0;
 		if(grassSpace.getObjectAt(x,y) != null){
 			i = ((Integer)grassSpace.getObjectAt(x,y)).intValue();
