@@ -46,11 +46,15 @@ public class Rabbit implements Drawable{
 		G.drawFastRoundRect(Color.blue);
 	}
 	
+	/**
+	 * Moves a rabbit from x, y to newX, newY, which is in a distance of 1 from the old cell.
+	 */
 	public void moveRabbit() {
 		int directions[]= {-1,0,1};
 		int vx = 0;
 		int vy = 0;
 		
+		// Generate the direction in which the rabbit moves.
 		Random rand = new Random();
 		vx= directions[rand.nextInt( directions.length)];		
 		if (vx != 0) {
@@ -64,7 +68,6 @@ public class Rabbit implements Drawable{
 		
 		if(!worldSpace.checkIfRabbitOn(newX, newY)) {
 			worldSpace.removeRabbitAt(x, y);
-			//System.out.println("old coordinates: "+x+", "+y+" => "+ "new coordinates: "+newX+", "+newY);
 			x = newX;
 			y = newY;
 			worldSpace.placeRabbitIn(this);
@@ -93,12 +96,12 @@ public class Rabbit implements Drawable{
 		return y;
 	}
 	
+	/**
+	 * Debugging report method
+	 */
 	public void report() {
 		System.out.println("Position x " + x +
 				" and Position y " + y +
 				" with " + energy + " energy.");
 	}
-	
-	
-
 }

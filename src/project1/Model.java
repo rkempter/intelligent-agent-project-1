@@ -60,6 +60,9 @@ public class Model extends SimModelImpl{
 		return "Rabbits World Simulator";
 	}
 
+	/**
+	 * Initialization of Displays
+	 */
 	public void setup(){
 		System.out.println("System Setup");
 		schedule = new Schedule(1);
@@ -83,6 +86,9 @@ public class Model extends SimModelImpl{
 
 	}
 
+	/**
+	 * Creates all necessary instances and initializes the model. Starts simulation and displays the windows.
+	 */
 	public void begin(){
 		buildModel();
 		buildSchedule();
@@ -90,9 +96,11 @@ public class Model extends SimModelImpl{
 
 		displaySurf.display();
 		RabbitPopulation.display();
-
 	}
 
+	/**
+	 * Initializes the Model (Creation of the worldSpace and adding of rabbits to the system)
+	 */
 	public void buildModel(){
 		System.out.println("Running BuildModel");
 
@@ -104,44 +112,54 @@ public class Model extends SimModelImpl{
 		}
 	}
 
+	/**
+	 * Cretae Schedule for each step
+	 */
 	public void buildSchedule(){
 		System.out.println("Running BuildSchedule");
 
 		class worldStep extends BasicAction {
 			public void execute() {
+				// Let the grass grow
 				worldSpace.growGrass(GrassGrowthRate);
+				// Delete all death rabbits
 				deleteDeadrabbits();
 
+				// 
 				SimUtilities.shuffle(rabbitList);
-				for(int i =0; i < rabbitList.size(); i++){
+				for(int i = 0; i < rabbitList.size(); i++) {
+					// Get rabbit instance from the list
 					Rabbit rabbit = (Rabbit)rabbitList.get(i);
+					// Move rabbit from position xy to another (or the rabbit stays on the same cell)
 					rabbit.moveRabbit();
+					// Every rabbit eats some grass
 					rabbit.eatGrass();
-					//rabbit.report();
 				}
+				// If a rabbit has enough energy, he can reproduce itself
 				makeRabbitReproduction();
 				displaySurf.updateDisplay();
 			}
 		}
 
+		
 		schedule.scheduleActionBeginning(0, new worldStep());
 		
+		/*
+		 * Method used for diagram
+		 */
 	    class UpdateRabbitPopulationInSpace extends BasicAction {
 	        public void execute(){
 	        	RabbitPopulation.step();
 	        }
 	      }
 
-	      schedule.scheduleActionAtInterval(10, new UpdateRabbitPopulationInSpace());
-
-		class LivingRabbit extends BasicAction {
-			public void execute(){
-				livingRabbits();
-				displaySurf.updateDisplay();
-			}
-		}
-		schedule.scheduleActionAtInterval(10, new LivingRabbit());
+	      schedule.scheduleActionAtInterval(10, new UpdateRabbitPopulationInSpace()); // Only every tenth step, this is executed
 	}
+	
+	/**
+	 * Death rabbits need to be deleted out of the simulation
+	 * @return number of death rabbits
+	 */
 	private int deleteDeadrabbits(){
 		int deadRabbits = 0;		
 		for(int i = (rabbitList.size() - 1); i >= 0 ; i--){
@@ -152,15 +170,20 @@ public class Model extends SimModelImpl{
 				deadRabbits++;
 			}
 		}
-		System.out.println("Number of dead rabbits is: " + deadRabbits);
 		return deadRabbits;
 	}
+	
+	/**
+	 * If rabbits have enough energy, they can generate a new rabbit
+	 * @return new rabbit
+	 */
 	private int makeRabbitReproduction(){
 		int newRabbits = 0;
 		for(int i = rabbitList.size()-1; i >= 0; i--){
 			Rabbit rabbit = (Rabbit)rabbitList.get(i);
 			if(rabbit.getEnergy() > reproductionCost ){
-				Rabbit newRabbit= new Rabbit();
+				Rabbit newRabbit = new Rabbit();
+				// Place rabbit in the field
 				if(worldSpace.findPlaceRabbit(newRabbit)){
 					newRabbit.setWorld(worldSpace);
 					rabbit.setEnergy(rabbit.getEnergy()- reproductionCost);
@@ -173,25 +196,13 @@ public class Model extends SimModelImpl{
 				}
 			}
 		}
-		System.out.println("Number of new rabbits is: " + newRabbits);
 		return newRabbits;
 	}
 
-
-	private int livingRabbits(){
-		int livingRabbits = 0;
-		for(int i = 0; i < rabbitList.size(); i++){
-			Rabbit rabbit = (Rabbit)rabbitList.get(i);
-			if(rabbit.getEnergy() > 0) livingRabbits++;
-		}
-		System.out.println("Number of living rabbits is: " + livingRabbits);
-
-		return livingRabbits;
-	}
-
+	/**
+	 * Build display (Colors, mapping between values and grid
+	 */
 	public void buildDisplay(){
-		System.out.println("Running BuildDisplay");
-
 		ColorMap map = new ColorMap();
 
 		for(int i = 0; i < 16; i++) {
@@ -202,6 +213,7 @@ public class Model extends SimModelImpl{
 		Value2DDisplay displayGrass = new Value2DDisplay(worldSpace.getCurrentGrassSpace(), map);
 		displaySurf.addDisplayable(displayGrass, "Grass");
 
+		// Display rabbits
 		Object2DDisplay displayRabbit = new Object2DDisplay(worldSpace.getCurrentRabbitSpace());
 		displayRabbit.setObjectList(rabbitList);
 		displaySurf.addDisplayable(displayRabbit, "Rabbit");
@@ -268,9 +280,13 @@ public class Model extends SimModelImpl{
 
 	public void addNewRabbit() {
 		Rabbit r = new Rabbit();
-		r.setWorld(worldSpace);
-		rabbitList.add(r);
-		worldSpace.findPlaceRabbit(r);
+		if(worldSpace.findPlaceRabbit(r);) {
+			r.setWorld(worldSpace);
+			rabbitList.add(r);
+		} else {
+			r = null;
+		}
+		
 	}
 
 	public static void main(String[] args) {

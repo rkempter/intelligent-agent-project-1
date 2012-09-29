@@ -5,15 +5,25 @@ import uchicago.src.sim.space.Object2DGrid;
 import java.util.Vector;
 import java.awt.Point;
 
+/**
+ * 
+ * Describes the World the rabbits are living in.
+ *
+ */
+
 public class World {
-	//to fix. Figure out if the grass energy is a parameter or a fix value
 	private static final int MaxGrassEnergy = 5;
-	private static final int MinGrassEnergy = 2;
+	private static final int MinGrassEnergy = 0;
 
 
 	private Object2DGrid grassSpace;
 	private Object2DGrid rabbitSpace;
 
+	/**
+	 * Constructor for the class World. Initializes the grass space.
+	 * @param xSize
+	 * @param ySize
+	 */
 	public World(int xSize, int ySize){
 		//build a grid of xSize x ySize with objects Integer(0)
 		grassSpace = new Object2DGrid(xSize, ySize);
@@ -25,42 +35,63 @@ public class World {
 		rabbitSpace = new Object2DGrid(xSize, ySize);
 	}
 	
-	public void growGrass(int grassAmount){
-		//randomly grows grass in the grid (loops grassGrowthRate times)
-		for(int i = 0; i < grassAmount; i++){
-			int x = (int)(Math.random()*(grassSpace.getSizeX()));
-			int y = (int)(Math.random()*(grassSpace.getSizeY()));
-			int grassEnergy =  MaxGrassEnergy + (int)(Math.random()*MinGrassEnergy);
-			
-			grassSpace.putObjectAt(x,y,new Integer(grassEnergy));
+	/**
+	 * Adds to every field the same amount of grass.
+	 * 
+	 * @param grassGrowsRate
+	 */
+	public void growGrass(int grassGrowRate){
+		for(int x = 0; x < grassSpace.getSizeX(); x++) {
+			for(int y = 0; y < grassSpace.getSizeY(); y++) {
+				grassSpace.putObjectAt(x, y, new Integer(grassGrowRate));
+			}
 		}
 	}
 	
+	/**
+	 * Eats a certain amount of grass from xy. If the amount is less than the predefined value, then all the grass is eaten from the cell.
+	 * 
+	 * @param x
+	 * @param y
+	 * @return the amount of grass eaten at position xy
+	 */
 	public int eatGrassAt(int x, int y){
-		//check if at x,y there is grass. returns the energy of grass and delete the grass (eats the grass),
-		//returns 0 otherwise
-		int i;
-		if(grassSpace.getObjectAt(x,y)!= null){
+		int i = 0;
+		if(grassSpace.getObjectAt(x,y) != null){
 			i = ((Integer)grassSpace.getObjectAt(x,y)).intValue();
 			grassSpace.putObjectAt(x, y, new Integer(0));
-		}
-		else{
-			i = 0;
 		}
 		return i;
 	}
 
+	/**
+	 * Check if there is a rabbit at cell xy.
+	 * @param x
+	 * @param y
+	 * @return true or false
+	 */
 	public boolean checkIfRabbitOn(int x, int y) {
-		//check if there is a rabbit at cell x ,y. return True if occupied, false otherwise
 		boolean retVal = false;
-		if(rabbitSpace.getObjectAt(x, y) != null) retVal = true;
+		if(rabbitSpace.getObjectAt(x, y) != null) {
+			retVal = true;
+		}
 		return retVal;
 	}
+	
+	/**
+	 * Remove a rabbit from the cell at xy
+	 * @param x
+	 * @param y
+	 */
 	public void removeRabbitAt(int x, int y) {
-		//remove rabbit from cell (to be used when a rabbits move or if it dies)
 		rabbitSpace.putObjectAt(x, y, null);
 	}
 	
+	/**
+	 * find an empty space for a new rabbit. Returns true if the rabbit was placed, otherwise false.
+	 * @param rabbit
+	 * @return true or false
+	 */
 	public boolean findPlaceRabbit(Rabbit rabbit) {
 		boolean addedRabbit = false;
 		int nbrFields = rabbitSpace.getSizeX() * rabbitSpace.getSizeY();
@@ -86,13 +117,21 @@ public class World {
 		return addedRabbit;
 	}
 	
-	
+	/**
+	 * Place rabbit at a certain position
+	 * @param rabbit
+	 */
 	public void placeRabbitIn(Rabbit rabbit) {
 		int x = rabbit.getPositionX();
 		int y = rabbit.getPositionY();	
 		rabbitSpace.putObjectAt(x, y, rabbit);
 	}
 	
+	/**
+	 * Check if a coordinate x is still in the grid or outside
+	 * @param x
+	 * @return the corrected coordinate x
+	 */
 	public int checkBoundryX(int x) {
 		int max = rabbitSpace.getSizeX();
 		if(x >= max) {
@@ -104,6 +143,11 @@ public class World {
 		}
 	}
 	
+	/**
+	 * Check if a coordinate y is still in the grid or outside
+	 * @param y
+	 * @return the corrected coordinate y
+	 */
 	public int checkBoundryY(int y) {
 		int max = rabbitSpace.getSizeY();
 		
@@ -115,22 +159,33 @@ public class World {
 			return y;
 		}
 	}
+	
+	/**
+	 * Counts the total number of rabbits in the system.
+	 * @return nbr of rabbits
+	 */
 	public int RabbitPopulation(){
 		int population= 0;
-		for (int i=0; i<rabbitSpace.getSizeX(); i++){
-			for (int j=0; j<rabbitSpace.getSizeY(); j++){
-				if(rabbitSpace.getObjectAt(i, j)!=null){
-					population+= 1;
+		for (int i = 0; i < rabbitSpace.getSizeX(); i++) {
+			for (int j = 0; j < rabbitSpace.getSizeY(); j++) {
+				if(rabbitSpace.getObjectAt(i, j) != null) {
+					population++;
 				}
 			}
 		}
 		return population;
 	}
 	
-
+	/**
+	 * @return Object2DGrid grassSpace
+	 */
 	public Object2DGrid getCurrentGrassSpace() {
 	    return grassSpace;
 	}
+	
+	/**
+	 * @return Object2DGrid rabbitSpace
+	 */
 	public Object2DGrid getCurrentRabbitSpace() {
 	    return rabbitSpace;
 	}
