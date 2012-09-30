@@ -57,13 +57,17 @@ public class RabbitsGrassSimulationSpace {
 	 * @param y
 	 * @return the amount of grass eaten at position xy
 	 */
-	public int eatGrassAt(int x, int y) {
+	public int eatGrassAt(int x, int y, int amount) {
 		int i = 0;
 		if(grassSpace.getObjectAt(x,y) != null){
 			i = ((Integer)grassSpace.getObjectAt(x,y)).intValue();
-			grassSpace.putObjectAt(x, y, new Integer(0));
+			if (i >= amount) {
+				grassSpace.putObjectAt(x, y, new Integer(i - amount));
+				return amount;
+			}
 		}
-		return i;
+		grassSpace.putObjectAt(x, y, new Integer(0));
+		return i;	
 	}
 
 	/**

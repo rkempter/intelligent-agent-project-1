@@ -37,9 +37,11 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	private static final int NUMRABBITS = 20;
 	private static final int WORLDXSIZE = 20;
 	private static final int WORLDYSIZE = 20;
-	private static final int REPRODUCTIONCOST = 10;
+	private static final int REPRODUCTIONCOST = 20;
 	private static final int INITIALGRASS = 5;
 	private static final int GRASSGROWTHRATE = 1;
+	private static final int ENERGYCONSUMPTION = 2;
+	private static final int EATINGAMOUNT = 3;
 
 
 	private int numRabbits = NUMRABBITS;
@@ -48,6 +50,8 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	private int reproductionCost = REPRODUCTIONCOST;
 	private int initialGrass = INITIALGRASS;
 	private int GrassGrowthRate = GRASSGROWTHRATE;
+	private int energyConsumption = ENERGYCONSUMPTION;
+	private int eatingAmount = EATINGAMOUNT;
 
 	//private OpenSequenceGraph RabbitPopulation;
 	class RabbitOnPlace implements DataSource, Sequence {
@@ -134,8 +138,12 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 					RabbitsGrassSimulationAgent rabbit = (RabbitsGrassSimulationAgent) rabbitList.get(i);
 					// Move rabbit from position xy to another (or the rabbit stays on the same cell)
 					rabbit.moveRabbit();
+					
+					rabbit.consumeEnergy(energyConsumption);
+					
 					// Every rabbit eats some grass
-					rabbit.eatGrass();
+					rabbit.eatGrass(eatingAmount);
+					rabbit.report();
 				}
 				// If a rabbit has enough energy, he can reproduce itself
 				makeRabbitReproduction();
@@ -165,7 +173,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		int deadRabbits = 0;		
 		for(int i = (rabbitList.size() - 1); i >= 0 ; i--){
 			RabbitsGrassSimulationAgent rabbit = (RabbitsGrassSimulationAgent)rabbitList.get(i);
-			if(rabbit.getEnergy() ==0){
+			if(rabbit.getEnergy() <= 0){
 				worldSpace.removeRabbitAt(rabbit.getPositionX(), rabbit.getPositionY());
 				rabbitList.remove(i);
 				deadRabbits++;
@@ -228,7 +236,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
 	public String[] getInitParam(){
 		System.out.println("Init parameters");
-		String[] initParams = { "NumRabbits", "InitialEnergy", "WorldXSize", "WorldYSize", "ReproductionCost", "initialGrass", "GrassGrowthRate" };
+		String[] initParams = { "EatingAmount", "NumRabbits", "InitialEnergy", "EnergyConsumption", "WorldXSize", "WorldYSize", "ReproductionCost", "initialGrass", "GrassGrowthRate" };
 		return initParams;
 	}
 
@@ -262,6 +270,22 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
 	public void setReproductionCost(int rc) {
 		reproductionCost = rc;
+	}
+	
+	public int getEatingAmount() {
+		return eatingAmount;
+	}
+
+	public void setEatingAmount(int ea) {
+		eatingAmount = ea;
+	}
+	
+	public int getEnergyConsumption() {
+		return energyConsumption;
+	}
+
+	public void setEnergyConsumption(int ec) {
+		energyConsumption = ec;
 	}
 
 	public int getGrassGrowthRate() {

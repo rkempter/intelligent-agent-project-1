@@ -16,8 +16,8 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 	private int x;
 	private int y;
 	private int energy;
-	private static int maxInitialEnergy= 10;
-	private static int minInitialEnergy= 5;
+	private static int maxInitialEnergy = 10;
+	private static int minInitialEnergy = 5;
 
 	private RabbitsGrassSimulationSpace worldSpace;
 	
@@ -42,8 +42,8 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 		worldSpace = _worldSpace;
 	}
 	
-	public void eatGrass() {
-		energy += worldSpace.eatGrassAt(x,y);
+	public void eatGrass(int amount) {
+		energy += worldSpace.eatGrassAt(x,y, amount);
 	}
 	
 	public void draw(SimGraphics G){
@@ -76,10 +76,10 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 			y = newY;
 			worldSpace.placeRabbitIn(this);
 		}
-		consumeEnergy();
 	}
-	public void consumeEnergy(){
-		energy-= 1;
+	
+	public void consumeEnergy(int e){
+		energy -= e;
 	}
 	
 	public int getEnergy(){
