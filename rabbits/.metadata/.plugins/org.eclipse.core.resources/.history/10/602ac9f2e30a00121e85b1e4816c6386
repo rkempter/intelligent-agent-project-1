@@ -9,6 +9,11 @@ import uchicago.src.sim.engine.BasicAction;
 import uchicago.src.sim.engine.Schedule;
 import uchicago.src.sim.engine.SimInit;
 import uchicago.src.sim.engine.SimModelImpl;
+<<<<<<< Updated upstream:rabbits/.metadata/.plugins/org.eclipse.core.resources/.history/10/602ac9f2e30a00121e85b1e4816c6386
+=======
+import uchicago.src.sim.event.SliderListener;
+import uchicago.src.sim.gui.DisplaySurface;
+>>>>>>> Stashed changes:src/project1/Model.java
 import uchicago.src.sim.gui.ColorMap;
 import uchicago.src.sim.gui.DisplaySurface;
 import uchicago.src.sim.gui.Object2DDisplay;
@@ -42,13 +47,12 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	private static final int INITIALGRASS = 5;
 	private static final int GRASSGROWTHRATE = 1;
 
-
 	private int numRabbits = NUMRABBITS;
 	private int worldXSize = WORLDXSIZE;
 	private int worldYSize = WORLDYSIZE;
 	private int reproductionCost = REPRODUCTIONCOST;
 	private int initialGrass = INITIALGRASS;
-	private int GrassGrowthRate = GRASSGROWTHRATE;
+	private int GrassGrowthRate= GRASSGROWTHRATE;
 
 	private OpenSequenceGraph RabbitPopulation;
 
@@ -90,12 +94,32 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		RabbitPopulation = null;
 		RabbitPopulation = new OpenSequenceGraph("Rabbit population",this);
 		this.registerMediaProducer("Plot", RabbitPopulation);
+		
+		addSlider();	
 
 	}
+	private void addSlider(){
+		class Incrementer extends SliderListener {
+			public void execute() {
+				if (isSlidingLeft) {
+					GrassGrowthRate = value;
+				} else {
+					GrassGrowthRate = value;
+				}
+				System.out.println("grassGrowthRate: "+ GrassGrowthRate);
+			}
+		};
 
+		modelManipulator.addSlider("Grass Growth Rate", 0, 20, 2, new Incrementer());
+
+<<<<<<< Updated upstream:rabbits/.metadata/.plugins/org.eclipse.core.resources/.history/10/602ac9f2e30a00121e85b1e4816c6386
 	/**
 	 * Creates all necessary instances and initializes the model. Starts simulation and displays the windows.
 	 */
+=======
+	}
+	
+>>>>>>> Stashed changes:src/project1/Model.java
 	public void begin(){
 		buildModel();
 		buildSchedule();
@@ -113,7 +137,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
 		worldSpace = new World(worldXSize, worldYSize);
 		worldSpace.growGrass(initialGrass);
-
+		
 		for(int i = 0; i < numRabbits; i++) {
 			addNewRabbit();
 		}
@@ -148,6 +172,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		}
 
 		schedule.scheduleActionBeginning(0, new worldStep());
+<<<<<<< Updated upstream:rabbits/.metadata/.plugins/org.eclipse.core.resources/.history/10/602ac9f2e30a00121e85b1e4816c6386
 		
 		/*
 		 * Method used for diagram
@@ -159,6 +184,24 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	      }
 
 	      schedule.scheduleActionAtInterval(10, new UpdateRabbitPopulationInSpace()); // Only every tenth step, this is executed
+=======
+
+		class UpdateRabbitPopulationInSpace extends BasicAction {
+			public void execute(){
+				RabbitPopulation.step();
+			}
+		}
+
+		schedule.scheduleActionAtInterval(10, new UpdateRabbitPopulationInSpace());
+
+		class LivingRabbit extends BasicAction {
+			public void execute(){
+				livingRabbits();
+				displaySurf.updateDisplay();
+			}
+		}
+		schedule.scheduleActionAtInterval(10, new LivingRabbit());
+>>>>>>> Stashed changes:src/project1/Model.java
 	}
 	
 	/**
@@ -222,7 +265,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		Object2DDisplay displayRabbit = new Object2DDisplay(worldSpace.getCurrentRabbitSpace());
 		displayRabbit.setObjectList(rabbitList);
 		displaySurf.addDisplayable(displayRabbit, "Rabbit");
-		
+
 		RabbitPopulation.addSequence("Rabbit Population", new RabbitOnPlace());
 	}
 
@@ -231,8 +274,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	}
 
 	public String[] getInitParam(){
-		System.out.println("Init parameters");
-		String[] initParams = { "NumRabbits", "InitialEnergy", "WorldXSize", "WorldYSize", "ReproductionCost", "initialGrass", "GrassGrowthRate" };
+		String[] initParams = {"NumRabbits", "InitialEnergy", "WorldXSize", "WorldYSize", "ReproductionCost", "initialGrass", "GrassGrowthRate" };
 		return initParams;
 	}
 
